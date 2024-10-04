@@ -1,32 +1,34 @@
 #!/bin/bash
 
-if [ -z "$1" ]; then
-    echo "Usage: $0 <project_name>"
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "Usage: $0 <build_type> <project_name>"
+    exit 1
 fi
 
-project_name=$1
+build_type=$1
+project_name=$2
 build_dir="./build"
 
 if [ -d "$build_dir" ]; then
     echo "tearing down build.."
     rm -rf ./build
-    echo "creating build directory.."
-    mkdir -p build
-    cd ./build
-    echo "generating build assets.."
-    cmake ..
-    echo "compiling project.."
-    cmake --build .
-    echo "executing project.."
-    ./${project_name}
-else
-    echo "creating build directory.."
+    echo "creating build dir.."
     mkdir build
-    cd ./build
+    cd build || return
     echo "generating build assets.."
-    cmake ..
+    cmake -DCMAKE_BUILD_TYPE="${build_type}" ..
     echo "compiling project.."
     cmake --build .
     echo "executing project.."
-    ./${project_name}
+    ./"${project_name}"
+else
+    echo "creating build dir.."
+    mkdir build
+    cd ./build || return
+    echo "generating build assets.."
+    cmake -DCMAKE_BUILD_TYPE="${build_type}" ..
+    echo "compiling project.."
+    cmake --build .
+    echo "excuting project.."
+    ./"${project_name}"
 fi
