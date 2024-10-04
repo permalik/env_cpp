@@ -10,6 +10,11 @@ project_name=$1
 cmake_content=$(cat <<EOL
 # CMakeLists.txt
 
+cmake_minimum_required(VERSION 3.10)
+project(${project_name} CXX)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 set(SOURCES
     src/${project_name}.cpp
 )
@@ -19,11 +24,6 @@ set(SOURCES
 # )
 
 add_executable(${project_name} \${SOURCES})
-
-cmake_minimum_required(VERSION 3.10)
-project(${project_name} CXX)
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_options(${project_name} PRIVATE -g -Wall -Wextra -Werror -O0)
